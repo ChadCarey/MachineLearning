@@ -17,9 +17,9 @@ public class MachineLearning {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        IrisData data = new IrisData();
-        ArrayList<IrisDataPoint> learn = data.getLearnSet();
-        ArrayList<IrisDataPoint> test = data.getTestSet();
+        ArrayList<IrisDataPoint> learn = IrisData.getLearnSet();
+        System.out.println(learn.size());
+        ArrayList<IrisDataPoint> test = IrisData.getTestSet();
         System.out.println(test.size() + learn.size());
     }
     

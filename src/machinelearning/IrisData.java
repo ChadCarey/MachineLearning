@@ -29,38 +29,34 @@ public class IrisData {
 
     final private static String TEST_FILE = "testset.csv";
     final private static String LEARN_FILE = "learnset.csv";
-    private ArrayList<IrisDataPoint> testSet;
-    private ArrayList<IrisDataPoint> learnSet;
     
     /**
      * IrisData constructor
      * loads the Iris data from files. If the files don't exists we create them
      */
-    public IrisData() {
-        testSet = new ArrayList<IrisDataPoint>();
-        learnSet = new ArrayList<IrisDataPoint>();
-        if(filesExist())
-            loadDataFiles();
-        else {
+    private IrisData() {
+        if(!filesExist()) {
             createDataFiles();
-            loadDataFiles();
         }
     }
 
     /**
      * getTestSet
      * returns an ArrayList of the testSet
+     * @return 
      */
-    public ArrayList<IrisDataPoint> getTestSet() {
-        return testSet;
+    public static ArrayList<IrisDataPoint> getTestSet() {
+        IrisData data = new IrisData();
+        return data.loadTestSet();
     }
     
     /**
      * getTestSet
      * returns an ArrayList of the testSet
      */
-    public ArrayList<IrisDataPoint> getLearnSet() {
-        return learnSet;
+    public static ArrayList<IrisDataPoint> getLearnSet() {
+        IrisData data = new IrisData();
+        return data.loadLearnSet();
     }
 
     /**
@@ -161,8 +157,13 @@ public class IrisData {
         return true;
     }
     
-    private void loadDataFiles() {
+    /**
+     * loads the testSet from the LEARN_SET file
+     * @return 
+     */
+    private ArrayList<IrisDataPoint> loadTestSet() {
         // TEST_FILE
+        ArrayList<IrisDataPoint> testSet = new ArrayList<IrisDataPoint>();
         try {
             File file = new File(TEST_FILE);
             BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -177,14 +178,23 @@ public class IrisData {
         } catch (IOException ex) {
             Logger.getLogger(IrisData.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return testSet;
+    }
+    
+    /**
+     * loads the learnSet from the LEARN_SET file
+     * @return 
+     */
+    private ArrayList<IrisDataPoint> loadLearnSet() {
         // LEARN_FILE
+        ArrayList<IrisDataPoint> learnSet = new ArrayList<IrisDataPoint>();
         try {
             File file = new File(LEARN_FILE);
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String line = "";
             while((line = reader.readLine()) != null) {
                 if(!line.isEmpty())
-                    testSet.add(new IrisDataPoint(line));
+                    learnSet.add(new IrisDataPoint(line));
             }
             reader.close();
         } catch (FileNotFoundException ex) {
@@ -192,5 +202,6 @@ public class IrisData {
         } catch (IOException ex) {
             Logger.getLogger(IrisData.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return learnSet;
     }
 }
