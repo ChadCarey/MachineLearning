@@ -29,7 +29,7 @@ public class IrisData {
 
     final private static String TEST_FILE = "testset.csv";
     final private static String LEARN_FILE = "learnset.csv";
-    
+    final private static String IRIS_FILE = "irisData.csv";
     /**
      * IrisData constructor
      * loads the Iris data from files. If the files don't exists we create them
@@ -133,9 +133,9 @@ public class IrisData {
         if (!file.exists()) {
             URL website = new URL("http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data");
             ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-            FileOutputStream fos = new FileOutputStream("irisData.csv");
+            FileOutputStream fos = new FileOutputStream(IRIS_FILE);
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-            file = new File("irisData.csv");
+            file = new File(IRIS_FILE);
         }
         return file;
     }
