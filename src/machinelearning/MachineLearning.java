@@ -24,6 +24,8 @@ public class MachineLearning {
     public void run() {
         Instances learn = IrisData.getLearnSet();
         Instances test = IrisData.getTestSet();
+        System.out.println("Number of instances in the learning set: " + learn.numInstances());
+        System.out.println("Number of instances in the testing set: " + test.numInstances());
         MyClassifier classy = new MyClassifier();
         try {
             classy.buildClassifier(learn);
