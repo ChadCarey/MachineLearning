@@ -19,6 +19,9 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import weka.core.Instances;
+import weka.core.converters.CSVLoader;
+
 
 /**
  * handles the retrival and parsing of Iris machine learning data
@@ -39,13 +42,14 @@ public class IrisData {
             createDataFiles();
         }
     }
+   
 
     /**
      * getTestSet
      * returns an ArrayList of the testSet
      * @return 
      */
-    public static ArrayList<IrisDataPoint> getTestSet() {
+    public static Instances getTestSet() {
         IrisData data = new IrisData();
         return data.loadTestSet();
     }
@@ -53,8 +57,9 @@ public class IrisData {
     /**
      * getTestSet
      * returns an ArrayList of the testSet
+     * @return 
      */
-    public static ArrayList<IrisDataPoint> getLearnSet() {
+    public static Instances getLearnSet() {
         IrisData data = new IrisData();
         return data.loadLearnSet();
     }
@@ -62,8 +67,9 @@ public class IrisData {
     /**
      * createDataFiles
      * creates the LEARN_FILE and TEST_FILE, 70% of the data does into the LEARN_FILE
+     * if the files exist they will be re-generated
      */
-    private void createDataFiles() {
+    public void createDataFiles() {
         // get the iris data from the database
         File data = null;
         try {
@@ -161,47 +167,37 @@ public class IrisData {
      * loads the testSet from the LEARN_SET file
      * @return 
      */
-    private ArrayList<IrisDataPoint> loadTestSet() {
-        // TEST_FILE
-        ArrayList<IrisDataPoint> testSet = new ArrayList<IrisDataPoint>();
+    private Instances loadTestSet() {
+        Instances data = null;
         try {
-            File file = new File(TEST_FILE);
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            String line = "";
-            while((line = reader.readLine()) != null) {
-                if(!line.isEmpty())
-                    testSet.add(new IrisDataPoint(line));
-            }
-            reader.close();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(IrisData.class.getName()).log(Level.SEVERE, null, ex);
+            CSVLoader loader = new CSVLoader();
+            loader.setSource(new File(TEST_FILE));
+            data = loader.getDataSet();
         } catch (IOException ex) {
             Logger.getLogger(IrisData.class.getName()).log(Level.SEVERE, null, ex);
+            System.exit(3);
         }
-        return testSet;
+    
+        return data;
     }
     
     /**
      * loads the learnSet from the LEARN_SET file
      * @return 
      */
-    private ArrayList<IrisDataPoint> loadLearnSet() {
+    private Instances loadLearnSet() {
         // LEARN_FILE
-        ArrayList<IrisDataPoint> learnSet = new ArrayList<IrisDataPoint>();
+        Instances data = null;
         try {
-            File file = new File(LEARN_FILE);
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            String line = "";
-            while((line = reader.readLine()) != null) {
-                if(!line.isEmpty())
-                    learnSet.add(new IrisDataPoint(line));
-            }
-            reader.close();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(IrisData.class.getName()).log(Level.SEVERE, null, ex);
+            CSVLoader loader = new CSVLoader();
+            loader.setSource(new File(LEARN_FILE));
+            data = loader.getDataSet();
         } catch (IOException ex) {
             Logger.getLogger(IrisData.class.getName()).log(Level.SEVERE, null, ex);
+            System.exit(3);
         }
-        return learnSet;
+    
+        return data;
     }
+    
 }
